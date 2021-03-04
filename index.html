@@ -49,7 +49,7 @@
     document.addEventListener('DOMContentLoaded', (ev) => {
         console.log("Page Loaded");
         var consJ = localStorage.videoConstraints;
-        var consO = consJ?JSON.parse(consJ):{ audio: false, video: { facingMode: "user" } }
+        var consO = consJ?JSON.parse(consJ):{ audio: true, video: { facingMode: "user" } }
         setConstraints(consO);
     });
     navigator.mediaDevices.ondevicechange = (change) => {
