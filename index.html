@@ -1,0 +1,60 @@
+<html>
+<head>
+    Experiments with camera selection
+</head>
+<body>
+<h1>Experiments with camera selection</h1>
+<p>
+    <button onclick="listCams()"> enumerateDevices </button>
+    <br/>
+    When you first go to a page you just get anonymous generic devices:
+    <ul id="dlist">
+    </ul>
+</p>
+<p>
+    <button onclick="gum()"> getUserMedia</button>(<pre id="constraints"></pre>)
+    <br/>
+<button onclick="localStorage.videoConstraints = JSON.stringify(constraints)"> Store constraints </button>
+<button onclick="localStorage.removeItem('videoConstraints');"> Clear Stored constraints </button>
+
+    <video id="vid" autoplay muted> </video>
+</p>
+<p>
+</p>
+<a href="https://twitter.com/steely_glint/status/1367130794460909574">Twitter thread</a>
+<script type="text/javascript">
+    var constraints =  {};
+    function setConstraints(c){
+        constraints = c;
+        document.getElementById("constraints").innerText=JSON.stringify(c);
+    }
+    function setDeviceId(id){
+        constraints.video = { deviceId: id } ;
+        setConstraints(constraints);
+    }
+    function listCams(){
+        navigator.mediaDevices.enumerateDevices().then((mdis)=>{
+            let q= '"';
+           var ls = mdis.map((mdi) => "<li onclick='setDeviceId("+q+mdi.deviceId+q+")'><pre>deviceId:"+mdi.deviceId+" kind:"+mdi.kind+" label:"+mdi.label+"</pre></li>").join("\n");
+           document.getElementById("dlist").innerHTML=ls;
+        });
+    }
+    function gum(){
+        navigator.mediaDevices.getUserMedia(constraints).then((stream)=>
+        {
+            document.getElementById("vid").srcObject = stream;
+        }
+        )
+    }
+    document.addEventListener('DOMContentLoaded', (ev) => {
+        console.log("Page Loaded");
+        var consJ = localStorage.videoConstraints;
+        var consO = consJ?JSON.parse(consJ):{ audio: false, video: { facingMode: "user" } }
+        setConstraints(consO);
+    });
+    navigator.mediaDevices.ondevicechange = (change) => {
+        listCams();
+    }
+</script>
+</body>
+</html>
