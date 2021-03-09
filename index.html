@@ -35,7 +35,7 @@
     function listCams(){
         navigator.mediaDevices.enumerateDevices().then((mdis)=>{
             let q= '"';
-           var ls = mdis.map((mdi) => "<li onclick='setDeviceId("+q+mdi.deviceId+q+")'><pre>deviceId:"+mdi.deviceId+" kind:"+mdi.kind+" label:"+mdi.label+"</pre></li>").join("\n");
+           var ls = mdis.map((mdi) => "<li><button onclick='setDeviceId("+q+mdi.deviceId+q+")'>use</button></button><pre>deviceId:"+mdi.deviceId+" kind:"+mdi.kind+" label:"+mdi.label+"</pre></li>").join("\n");
            document.getElementById("dlist").innerHTML=ls;
         });
     }
